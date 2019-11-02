@@ -1,36 +1,36 @@
---tmorphew script 1 for creating database and tables
+-- tmorphew script 1 for creating database and tables
 
 
---List all the current databases owned by you
+-- List all the current databases owned by you
 SHOW databases;
 
---Delete the database called yourwesternuseridassign2db if it exists
+-- Delete the database called yourwesternuseridassign2db if it exists
 DROP DATABASE IF EXISTS tmorphewassign2db;
 
---Create a database called yourwesternuseridassign2db
+-- Create a database called yourwesternuseridassign2db
 CREATE DATABASE tmorphewassign2db;
 
---Connect to (use) that database
+-- Connect to (use) that database
 USE tmorphewassign2db;
 
---Add these lines to make sure the t.a. has access to your database in order to mark this assignment:
+-- Add these lines to make sure the t.a. has access to your database in order to mark this assignment:
 GRANT USAGE ON *.* TO 'ta'@'localhost';
 DROP USER 'ta'@'localhost';
 CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
 GRANT ALL PRIVILEGES ON yourwesternuseridassign2db.* TO 'ta'@'localhost';
 FLUSH PRIVILEGES;
 
---List all the tables (should be none initially)
+-- List all the tables (should be none initially)
 SHOW TABLES;
 
---Create the tables you need to solve the problem above with the appropriate types and keys, foreign keys.  Make sure that:
---you create the foreign keys (this may force you to create the tables in a certain order in order to indicate the foreign keys)
---when you delete a doctor, cause an error to occur if the doctor is head of the hospital and do a cascade delete when you delete a doctor who is treating patients. 
+-- Create the tables you need to solve the problem above with the appropriate types and keys, foreign keys.  Make sure that:
+-- you create the foreign keys (this may force you to create the tables in a certain order in order to indicate the foreign keys)
+-- when you delete a doctor, cause an error to occur if the doctor is head of the hospital and do a cascade delete when you delete a doctor who is treating patients. 
 CREATE TABLE patient (ohip INT(9) NOT NULL, firstname VARCHAR(20), lastname VARCHAR(20), PRIMARY KEY (ohip));
 CREATE TABLE doctor (license VARCHAR(4) NOT NULL, firstname VARCHAR(20), lastname VARCHAR(20), specialty VARCHAR(30), workplace VARCHAR(3), licensedate DATE, PRIMARY KEY (license));
 CREATE TABLE hospital (code VARCHAR(3) NOT NULL, name VARCHAR(20), city VARCHAR(20), province VARCHAR(2), numberofbeds INT, headdoc VARCHAR(4), headdocdate DATE, PRIMARY KEY (code), FOREIGN KEY (headdoc) REFERENCES doctor (license));
 ALTER TABLE doctor ADD FOREIGN KEY (workplace) REFERENCES hospital(code);
 CREATE TABLE treats (patientid INT(9), doctorid VARCHAR(4), FOREIGN KEY (patientid) REFERENCES patient(ohip), FOREIGN KEY (doctorid) REFERENCES doctor(license) ON DELETE CASCADE);
 
---List the tables again
+-- List the tables again
 SHOW TABLES;
